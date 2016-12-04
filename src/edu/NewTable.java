@@ -1,6 +1,7 @@
 package edu;
 
 import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.Vector;
 
 class HashPair<K, E>{
@@ -12,9 +13,17 @@ public class NewTable<K, E> {
 
 
 	private Vector< LinkedList<HashPair<K,E>>> table;
+	private int size;
 	
 	public NewTable(){
-		//TODO
+		size = 5;
+		table = new Vector<>(size);
+		
+		// Populate the Vector full of linked lists
+		for(int i = 0; i< table.capacity(); i++){
+			LinkedList<HashPair<K,E>> tmp = new LinkedList<HashPair<K,E>>();
+			table.add(tmp);
+		}
 	}
 	
 	/**
@@ -40,7 +49,36 @@ public class NewTable<K, E> {
 	 * @throws NullPointerException - Indicates that key is null.
 	 */
 	public E put(K key, E element){
-		return element; //TODO
+		if (key == null || element == null){
+			throw new NullPointerException("Key or element is null");
+		}
+		
+		// Set up a ListIteratory that can step through the one linked list that might
+		// already have an element with the given key
+		int i = hash(key);
+		LinkedList<HashPair<K,E>> oneList = table.get(i);
+		ListIterator< HashPair<K,E>> cursor = oneList.listIterator(0);
+		
+		// Two other variables for the new HashPair (if needed) and the return value:
+		HashPair<K,E> pair;
+		E answer;
+		
+		// Step through the one linked list using the iterator (see page 287):
+		while (cursor.hasNext()){
+			pair = cursor.next();
+			if (pair.key.equals(key)){
+				answer = pair.element;
+				pair.element = element;
+				return answer;
+			}
+		}
+		
+		// The specified key was not on oneList, so create a new node for the new entry:
+		pair = new HashPair<K,E>();
+		pair.key = key;
+		pair.element = element;
+		oneList.add(pair);
+		return null;
 	}
 	
 	
@@ -108,14 +146,28 @@ public class NewTable<K, E> {
 	
 	public int hash(K key){
 		//TODO
-		return key.hashCode();
+		return key.hashCode() % this.size;
 	}
 	
 	public int size(){
 		return -1; //TODO
 	}
 	
+	public void print(){
+		for(int i=0; i<table.capacity();i++){
+			System.out.println("Table: "+i+table.get(i));
+		}
+	}
+	
 	public static void main(String[] args){
+		NewTable<String,Integer> nt = new NewTable<String,Integer>();
+		nt.put("Andy", 27);
+		nt.put("Kristin", 28);
+		nt.put("Bob", 30);
+		nt.put("Kelly", 43);
+		nt.put("Mark", 38);
+		nt.put("Joe", 73);
 		
+		nt.print();
 	}
 }
