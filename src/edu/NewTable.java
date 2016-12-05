@@ -7,6 +7,7 @@ import java.util.Vector;
 class HashPair<K, E>{
 	K key;
 	E element;
+
 }
 
 public class NewTable<K, E> {
@@ -99,7 +100,22 @@ public class NewTable<K, E> {
 	 * @return
 	 */
 	public boolean containsKey(K key){
-		return true; //TODO
+		if( key == null){
+			throw new NullPointerException("key is null");
+		}
+		LinkedList<HashPair<K,E>> oneList = table.get(hash(key));
+		ListIterator< HashPair<K,E>> cursor = oneList.listIterator();
+		
+		HashPair<K,E> pair;
+		
+		while( cursor.hasNext() ){
+			pair = cursor.next();
+			System.out.println(pair.key+" "+pair.element+" SearchKey: "+key);
+			if( pair.key.equals(key) ){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/**
@@ -110,14 +126,28 @@ public class NewTable<K, E> {
 	 * @Precondition key cannot be null
 	 * 
 	 * @return A reference to the object with the specified key ( if this table contains such
-	 * an object); null otherwise.  Note that key.equals() is usedto compare the key to the 
+	 * an object); null otherwise.  Note that key.equals() is used to compare the key to the 
 	 * keys that are in the table
 	 * 
 	 * @throws NullPointerException - Indicates that key is null.
 	 */
 	public E get(K key){
-		E ele = null;
-		return ele; //TODO
+		if( key == null){
+			throw new NullPointerException("key is null");
+		}
+		
+		LinkedList<HashPair<K,E>> oneList = table.get(hash(key));
+		ListIterator<HashPair<K,E>> cursor = oneList.listIterator();
+		
+		HashPair<K,E> pair;
+		
+		while (cursor.hasNext()){
+			pair = cursor.next();
+			if(pair.key.equals(key)){
+				return pair.element;
+			}
+		}
+		return null;
 	}
 	
 	
@@ -136,22 +166,59 @@ public class NewTable<K, E> {
 	 * @return
 	 */
 	public E remove(K key){
-		E ele = null;
-		return ele; //TODO
+		if(key == null){
+			throw new NullPointerException("key is null");
+		}
+		
+		LinkedList<HashPair<K,E>> oneLine = table.get(hash(key));
+		ListIterator<HashPair<K,E>> cursor = oneLine.listIterator();
+		
+		HashPair<K,E> pair;
+		
+		while(cursor.hasNext()){
+			pair = cursor.next();
+			if(pair.key.equals(key)){
+				cursor.remove();
+				return pair.element;
+			}
+		}
+		return null;
 	}
 	
 	public void clear(){
-		//TODO
+		size = 5;
+		table = new Vector<>(size);
+		
+		// Populate the Vector full of linked lists
+		for(int i = 0; i< table.capacity(); i++){
+			LinkedList<HashPair<K,E>> tmp = new LinkedList<HashPair<K,E>>();
+			table.add(tmp);
+		}
 	}
 	
 	public int hash(K key){
-		//TODO
 		return key.hashCode() % this.size;
 	}
 	
 	public int size(){
-		return -1; //TODO
+		int count = 0;
+		
+		// Iterate through the linked lists in the vector.  Then count the
+		// inidivdual HashPairs
+		ListIterator<LinkedList<HashPair<K,E>>> lists = table.listIterator();
+		LinkedList<HashPair<K,E>> linkedList;
+		while(lists.hasNext()){
+			linkedList = lists.next();
+			ListIterator<HashPair<K,E>> pairs = linkedList.listIterator();
+			while(pairs.hasNext()){
+				pairs.next();
+				count++;
+			}
+		}
+		
+		return count;
 	}
+	
 	
 	public void print(){
 		for(int i=0; i<table.capacity();i++){
@@ -167,6 +234,9 @@ public class NewTable<K, E> {
 		nt.put("Kelly", 43);
 		nt.put("Mark", 38);
 		nt.put("Joe", 73);
+		
+		boolean beTrue = nt.containsKey("Joey");
+		System.out.println(beTrue);
 		
 		nt.print();
 	}
