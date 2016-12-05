@@ -185,6 +185,9 @@ public class NewTable<K, E> {
 		return null;
 	}
 	
+	/**
+	 * Clears the NewTable to be completely empty
+	 */
 	public void clear(){
 		size = 5;
 		table = new Vector<>(size);
@@ -196,10 +199,19 @@ public class NewTable<K, E> {
 		}
 	}
 	
+	/**
+	 * Creates a hash based on the size variable
+	 * @param key
+	 * @return int - the hash of the given key
+	 */
 	public int hash(K key){
 		return key.hashCode() % this.size;
 	}
 	
+	/**
+	 * returns the number of elements in the New Table
+	 * @return int - size of object
+	 */
 	public int size(){
 		int count = 0;
 		
@@ -219,7 +231,9 @@ public class NewTable<K, E> {
 		return count;
 	}
 	
-	
+	/**
+	 * Prints the current New Table
+	 */
 	public void print(){
 		for(int i=0; i<table.capacity();i++){
 			System.out.println("Table: "+i+table.get(i));
@@ -252,11 +266,13 @@ public class NewTable<K, E> {
 		// Test for remove
 		Integer removed = nt.remove("Kelly");
 		System.out.println("nt.remove(\"Kelly\") returned "+removed);
+		Integer k = nt.get("Kelly");
+		System.out.println("nt.get(\"Kelly\") returned "+k);
 		
 		
 		// Test for clear() void
-		//nt.print();
+		nt.print();
 		nt.clear();
-		//nt.print();
+		nt.print();
 	}
 }
