@@ -235,9 +235,28 @@ public class NewTable<K, E> {
 		nt.put("Mark", 38);
 		nt.put("Joe", 73);
 		
-		boolean beTrue = nt.containsKey("Joey");
-		System.out.println(beTrue);
 		
-		nt.print();
+		
+		// Test for containsKey
+		boolean beTrue = nt.containsKey("Joey");
+		System.out.println("nt.containsKey(\"Joey\") returned "+beTrue);
+		boolean beFalse = nt.containsKey("SomeNameNotThere");
+		System.out.println("nt.containsKey(\"SomeNameNotThere\") returned "+beFalse);
+		
+		
+		// Test for get(K) E
+		Integer get = nt.get("Mark");
+		System.out.println("nt.get(\"Mark\") returned "+get);
+		
+		
+		// Test for remove
+		Integer removed = nt.remove("Kelly");
+		System.out.println("nt.remove(\"Kelly\") returned "+removed);
+		
+		
+		// Test for clear() void
+		//nt.print();
+		nt.clear();
+		//nt.print();
 	}
 }
